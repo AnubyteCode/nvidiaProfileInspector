@@ -23,7 +23,8 @@ namespace nspector
                 SafeNativeMethods.DeleteFile(Application.ExecutablePath + ":Zone.Identifier");
             }
             catch { }
-#if RELEASE
+
+#if !DEBUG
             try
             {
 #endif
@@ -92,7 +93,7 @@ namespace nspector
                         }
                     }
                 }
-#if RELEASE
+#if !DEBUG
             }
             catch (Exception ex)
             {

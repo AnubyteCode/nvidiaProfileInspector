@@ -1,4 +1,6 @@
-﻿namespace nspector
+﻿using System.Drawing;
+
+namespace nspector
 {
     partial class frmBitEditor
     {
@@ -80,7 +82,7 @@
             // 
             // tbFilter
             // 
-            this.tbFilter.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            this.tbFilter.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.tbFilter.Location = new System.Drawing.Point(219, 647);
             this.tbFilter.Name = "tbFilter";
@@ -112,7 +114,7 @@
             // 
             // gbDirectTest
             // 
-            this.gbDirectTest.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            this.gbDirectTest.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.gbDirectTest.Controls.Add(this.btnBrowseGame);
             this.gbDirectTest.Controls.Add(this.tbGamePath);
@@ -139,7 +141,7 @@
             // 
             // tbGamePath
             // 
-            this.tbGamePath.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.tbGamePath.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.tbGamePath.Location = new System.Drawing.Point(174, 21);
             this.tbGamePath.Name = "tbGamePath";
@@ -157,8 +159,8 @@
             // 
             // clbBits
             // 
-            this.clbBits.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+            this.clbBits.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.clbBits.CheckBoxes = true;
             this.clbBits.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
@@ -171,7 +173,7 @@
             this.clbBits.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
             this.clbBits.HideSelection = false;
             this.clbBits.Location = new System.Drawing.Point(10, 10);
-            this.clbBits.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.clbBits.Margin = new System.Windows.Forms.Padding(2);
             this.clbBits.MultiSelect = false;
             this.clbBits.Name = "clbBits";
             this.clbBits.ShowGroups = false;
@@ -203,6 +205,8 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
+            this.BackColor = Color.FromArgb(32, 32, 32); // Dark background
+            this.ForeColor = Color.White; // Light text
             this.ClientSize = new System.Drawing.Size(847, 678);
             this.Controls.Add(this.clbBits);
             this.Controls.Add(this.gbDirectTest);

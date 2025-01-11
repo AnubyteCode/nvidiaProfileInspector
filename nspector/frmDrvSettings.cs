@@ -17,7 +17,7 @@ using System.Windows.Forms;
 
 namespace nspector
 {
-    internal partial class frmDrvSettings : Form
+    internal partial class frmDrvSettings : MicaForm
     {
         private readonly DrsSettingsMetaService _meta = DrsServiceLocator.MetaService;
         private readonly DrsSettingsService _drs = DrsServiceLocator.SettingService;
@@ -39,6 +39,9 @@ namespace nspector
         public string _CurrentProfile = "";
 
         private bool isDevMode = false;
+
+        // Track hovered item for ListView
+        private ListViewItem _hoveredItem = null;
 
         protected override void WndProc(ref Message m)
         {
@@ -501,6 +504,190 @@ namespace nspector
             }
         }
 
+        // Add these methods for dark mode and ListView drawing
+        private void ApplyDarkMode()
+        {
+            // Set form background and foreground colors
+            this.BackColor = Color.FromArgb(32, 32, 32); // Dark background
+            this.ForeColor = Color.White; // Light text
+
+            // Apply dark mode to all controls recursively
+            ApplyDarkModeToControls(this.Controls);
+
+            // Apply dark mode to ListView
+            lvSettings.BackColor = Color.FromArgb(32, 32, 32);
+            lvSettings.ForeColor = Color.White;
+        }
+
+        private void ApplyDarkModeToControls(Control.ControlCollection controls)
+        {
+            foreach (Control control in controls)
+            {
+                // Set control background and foreground colors
+                control.BackColor = Color.FromArgb(32, 32, 32); // Dark background
+                control.ForeColor = Color.White; // Light text
+
+                // Handle specific control types
+                if (control is ListView listView)
+                {
+                    listView.BackColor = Color.FromArgb(32, 32, 32);
+                    listView.ForeColor = Color.White;
+                }
+                else if (control is TextBox textBox)
+                {
+                    textBox.BackColor = Color.FromArgb(64, 64, 64); // Slightly lighter background for text boxes
+                    textBox.ForeColor = Color.White;
+                }
+                else if (control is Button button)
+                {
+                    button.BackColor = Color.FromArgb(64, 64, 64); // Slightly lighter background for buttons
+                    button.ForeColor = Color.White;
+                }
+                else if (control is ComboBox comboBox)
+                {
+                    comboBox.BackColor = Color.FromArgb(64, 64, 64);
+                    comboBox.ForeColor = Color.White;
+                }
+                else if (control is ToolStrip toolStrip)
+                {
+                    toolStrip.BackColor = Color.FromArgb(32, 32, 32);
+                    toolStrip.ForeColor = Color.White;
+                }
+
+                // Recursively apply dark mode to child controls
+                if (control.HasChildren)
+                {
+                    ApplyDarkModeToControls(control.Controls);
+                }
+            }
+        }
+
+        private void InitializeListViewDrawing()
+        {
+            lvSettings.OwnerDraw = true;
+            lvSettings.DrawColumnHeader += lvSettings_DrawColumnHeader;
+            lvSettings.DrawItem += lvSettings_DrawItem;
+            lvSettings.DrawSubItem += lvSettings_DrawSubItem;
+            lvSettings.MouseMove += lvSettings_MouseMove; // Track hovered item
+            lvSettings.MouseLeave += lvSettings_MouseLeave; // Clear hover effect when mouse leaves
+        }
+
+        private void lvSettings_DrawColumnHeader(object sender, DrawListViewColumnHeaderEventArgs e)
+        {
+            // Draw the column header with dark mode colors
+            using (var backBrush = new SolidBrush(Color.FromArgb(45, 45, 45))) // Dark background
+            using (var foreBrush = new SolidBrush(Color.White)) // Light text
+            {
+                e.Graphics.FillRectangle(backBrush, e.Bounds);
+                e.Graphics.DrawString(e.Header.Text, e.Font, foreBrush, e.Bounds);
+            }
+        }
+
+        private void lvSettings_DrawItem(object sender, DrawListViewItemEventArgs e)
+        {
+            e.DrawDefault = false; // Disable default drawing
+
+            // Determine the background color based on the item state
+            Color backColor = e.Item.Selected ? Color.FromArgb(64, 64, 64) : Color.FromArgb(32, 32, 32);
+            if (e.Item == _hoveredItem) // Check if the item is being hovered
+            {
+                backColor = Color.FromArgb(96, 96, 96); // Hover color
+            }
+
+            // Draw the background
+            using (var backBrush = new SolidBrush(backColor))
+            {
+                e.Graphics.FillRectangle(backBrush, e.Bounds);
+            }
+
+            // Determine the text color
+            Color textColor = Color.White; // Default text color
+            if (e.Item.Group != null && e.Item.Group.Header.StartsWith("1-")) // Check if it's a group header
+            {
+                textColor = Color.FromArgb(173, 216, 230); // Light blue for group headers
+            }
+
+            // Draw the text
+            using (var foreBrush = new SolidBrush(textColor))
+            {
+                TextRenderer.DrawText(
+                    e.Graphics,
+                    e.Item.Text,
+                    e.Item.Font,
+                    e.Bounds,
+                    textColor,
+                    TextFormatFlags.Left | TextFormatFlags.VerticalCenter
+                );
+            }
+        }
+
+        private void lvSettings_DrawSubItem(object sender, DrawListViewSubItemEventArgs e)
+        {
+            e.DrawDefault = false; // Disable default drawing
+
+            // Determine the background color based on the item state
+            Color backColor = e.Item.Selected ? Color.FromArgb(64, 64, 64) : Color.FromArgb(32, 32, 32);
+            if (e.Item == _hoveredItem) // Check if the item is being hovered
+            {
+                backColor = Color.FromArgb(96, 96, 96); // Hover color
+            }
+
+            // Draw the background
+            using (var backBrush = new SolidBrush(backColor))
+            {
+                e.Graphics.FillRectangle(backBrush, e.Bounds);
+            }
+
+            // Determine the text color
+            Color textColor = Color.White; // Default text color
+            if (e.Item.Group != null && e.Item.Group.Header.StartsWith("1-")) // Check if it's a group header
+            {
+                textColor = Color.FromArgb(173, 216, 230); // Light blue for group headers
+            }
+
+            // Draw the text
+            using (var foreBrush = new SolidBrush(textColor))
+            {
+                TextRenderer.DrawText(
+                    e.Graphics,
+                    e.SubItem.Text,
+                    e.SubItem.Font,
+                    e.Bounds,
+                    textColor,
+                    TextFormatFlags.Left | TextFormatFlags.VerticalCenter
+                );
+            }
+        }
+
+        private void lvSettings_MouseMove(object sender, MouseEventArgs e)
+        {
+            // Get the item under the mouse cursor
+            var item = lvSettings.GetItemAt(e.X, e.Y);
+
+            if (item != _hoveredItem)
+            {
+                _hoveredItem = item;
+                lvSettings.Invalidate(); // Redraw the ListView to update the hover state
+            }
+
+            // Clear hover effect if the mouse is not over any item
+            if (item == null && _hoveredItem != null)
+            {
+                _hoveredItem = null;
+                lvSettings.Invalidate();
+            }
+        }
+
+        private void lvSettings_MouseLeave(object sender, EventArgs e)
+        {
+            // Clear hover effect when the mouse leaves the control
+            if (_hoveredItem != null)
+            {
+                _hoveredItem = null;
+                lvSettings.Invalidate();
+            }
+        }
+
         internal frmDrvSettings() : this(false, false)
         {
         }
@@ -516,6 +703,10 @@ namespace nspector
 
             tscbShowCustomSettingNamesOnly.Checked = showCsnOnly;
             Icon = Icon.ExtractAssociatedIcon(Application.ExecutablePath);
+
+            // Apply dark mode and Mica
+            ApplyDarkMode();
+            InitializeListViewDrawing();
         }
 
         public static double ScaleFactor = 1;
@@ -945,17 +1136,6 @@ namespace nspector
 
         private void tssbRemoveApplication_DropDownItemClicked(object sender, ToolStripItemClickedEventArgs e)
         {
-            //if ((uint)e.ClickedItem.Tag == 0
-            //    || (
-            //        (uint)e.ClickedItem.Tag == 1
-            //        &&
-            //        MessageBox.Show(this,
-            //            "Do you really want to delete this NVIDIA predefined application executeable?\r\n\r\nNote: This can not be restored until next driver installation!",
-            //            "Delete Application", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
-            //    )
-            //{
-            //    drs.DeleteApplication(currentProfile, e.ClickedItem.Text);
-            //}
             _drs.RemoveApplication(_CurrentProfile, e.ClickedItem.Tag.ToString());
             RefreshCurrentProfile();
         }

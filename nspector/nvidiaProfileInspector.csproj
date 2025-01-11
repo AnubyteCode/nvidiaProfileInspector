@@ -172,6 +172,9 @@
     <Compile Include="Common\NvapiException.cs" />
     <Compile Include="Common\SettingItem.cs" />
     <Compile Include="Common\SettingViewMode.cs" />
+    <Compile Include="MicaForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Native\NativeArrayHelper.cs" />
     <Compile Include="Native\NVAPI\NvApiDriverSettings.cs">
       <AutoGen>True</AutoGen>
