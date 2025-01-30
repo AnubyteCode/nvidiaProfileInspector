@@ -9,7 +9,7 @@ namespace nspector.Common.Meta
     internal class DriverSettingMetaService : ISettingMetaService
     {
 
-        private readonly Dictionary<uint, SettingMeta> _settingMetaCache = [];
+        private readonly Dictionary<uint, SettingMeta> _settingMetaCache = new Dictionary<uint, SettingMeta>();
         private readonly List<uint> _settingIds;
 
         public DriverSettingMetaService()
@@ -19,9 +19,7 @@ namespace nspector.Common.Meta
 
         private List<uint> InitSettingIds()
         {
-#pragma warning disable IDE0059 // Unnecessary assignment of a value
             var settingIds = new List<uint>();
-#pragma warning restore IDE0059 // Unnecessary assignment of a value
 
             var nvRes = nvw.DRS_EnumAvailableSettingIds(out settingIds, 512);
             if (nvRes != NvAPI_Status.NVAPI_OK)
@@ -36,10 +34,9 @@ namespace nspector.Common.Meta
             if ((settingId & 0xFFFFF000) == 0x10c7d000)
                 return null;
 
-            var values = new NVDRS_SETTING_VALUES
-            {
-                version = nvw.NVDRS_SETTING_VALUES_VER
-            };
+
+            var values = new NVDRS_SETTING_VALUES();
+            values.version = nvw.NVDRS_SETTING_VALUES_VER;
             uint valueCount = 255;
 
             var nvRes = nvw.DRS_EnumAvailableSettingValues(settingId, ref valueCount, ref values);
@@ -69,26 +66,26 @@ namespace nspector.Common.Meta
 
             if (values.settingType == NVDRS_SETTING_TYPE.NVDRS_DWORD_TYPE)
             {
-                result.DefaultDwordValue = values.defaultValue.DwordValue;
-                result.DwordValues = [];
+                result.DefaultDwordValue = values.defaultValue.dwordValue;
+                result.DwordValues = new List<SettingValue<uint>>();
                 for (int i = 0; i < values.numSettingValues; i++)
                 {
                     result.DwordValues.Add(
                         new SettingValue<uint>(Source)
                         {
-                            Value = values.settingValues[i].DwordValue,
-                            ValueName = DrsUtil.GetDwordString(values.settingValues[i].DwordValue),
+                            Value = values.settingValues[i].dwordValue,
+                            ValueName = DrsUtil.GetDwordString(values.settingValues[i].dwordValue),
                         });
                 }
             }
 
             if (values.settingType == NVDRS_SETTING_TYPE.NVDRS_WSTRING_TYPE)
             {
-                result.DefaultStringValue = values.defaultValue.StringValue;
-                result.StringValues = [];
+                result.DefaultStringValue = values.defaultValue.stringValue;
+                result.StringValues = new List<SettingValue<string>>();
                 for (int i = 0; i < values.numSettingValues; i++)
                 {
-                    var strValue = values.settingValues[i].StringValue;
+                    var strValue = values.settingValues[i].stringValue;
                     if (strValue != null)
                     {
                         result.StringValues.Add(
@@ -103,11 +100,11 @@ namespace nspector.Common.Meta
 
             if (values.settingType == NVDRS_SETTING_TYPE.NVDRS_BINARY_TYPE)
             {
-                result.DefaultBinaryValue = values.defaultValue.BinaryValue;
-                result.BinaryValues = [];
+                result.DefaultBinaryValue = values.defaultValue.binaryValue;
+                result.BinaryValues = new List<SettingValue<byte[]>>();
                 for (int i = 0; i < values.numSettingValues; i++)
                 {
-                    var binValue = values.settingValues[i].BinaryValue;
+                    var binValue = values.settingValues[i].binaryValue;
                     if (binValue != null)
                     {
                         result.BinaryValues.Add(
