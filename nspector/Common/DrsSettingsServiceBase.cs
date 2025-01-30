@@ -134,7 +134,7 @@ namespace nspector.Common
                 settingLocation = NVDRS_SETTING_LOCATION.NVDRS_CURRENT_PROFILE_LOCATION,
                 currentValue = new NVDRS_SETTING_UNION()
                 {
-                    dwordValue = dwordValue,
+                    DwordValue = dwordValue,
                 },
             };
 
@@ -154,7 +154,7 @@ namespace nspector.Common
                 settingLocation = NVDRS_SETTING_LOCATION.NVDRS_CURRENT_PROFILE_LOCATION,
                 currentValue = new NVDRS_SETTING_UNION()
                 {
-                    stringValue = stringValue,
+                    StringValue = stringValue,
                 },
             };
 
@@ -174,7 +174,7 @@ namespace nspector.Common
                 settingLocation = NVDRS_SETTING_LOCATION.NVDRS_CURRENT_PROFILE_LOCATION,
                 currentValue = new NVDRS_SETTING_UNION()
                 {
-                    binaryValue = binValue,
+                    BinaryValue = binValue,
                 },
             };
 
@@ -212,7 +212,7 @@ namespace nspector.Common
             var newSetting = ReadSetting(hSession, hProfile, settingId);
             if (newSetting == null)
                 return null;
-            return newSetting.Value.currentValue.dwordValue;
+            return newSetting.Value.currentValue.DwordValue;
         }
 
         protected void AddApplication(IntPtr hSession, IntPtr hProfile, string applicationName)

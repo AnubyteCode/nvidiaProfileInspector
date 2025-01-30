@@ -173,11 +173,11 @@ namespace nspector.Common
                 if (allowAddValue)
                 {
                     if (setting.settingType == NVDRS_SETTING_TYPE.NVDRS_WSTRING_TYPE)
-                        cachedSetting.AddStringValue(setting.predefinedValue.stringValue, profile.profileName);
+                        cachedSetting.AddStringValue(setting.predefinedValue.StringValue, profile.profileName);
                     else if (setting.settingType == NVDRS_SETTING_TYPE.NVDRS_DWORD_TYPE)
-                        cachedSetting.AddDwordValue(setting.predefinedValue.dwordValue, profile.profileName);
+                        cachedSetting.AddDwordValue(setting.predefinedValue.DwordValue, profile.profileName);
                     else if (setting.settingType == NVDRS_SETTING_TYPE.NVDRS_BINARY_TYPE)
-                        cachedSetting.AddBinaryValue(setting.predefinedValue.binaryValue, profile.profileName);
+                        cachedSetting.AddBinaryValue(setting.predefinedValue.BinaryValue, profile.profileName);
 
                 }
                 else

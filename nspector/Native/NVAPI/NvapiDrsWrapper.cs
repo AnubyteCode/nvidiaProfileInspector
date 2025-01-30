@@ -231,7 +231,7 @@ namespace nspector.Native.NVAPI2
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4100)]
         public byte[] rawData;
 
-        public byte[] binaryValue
+        public byte[] BinaryValue
         {
             readonly get
             {
@@ -252,7 +252,7 @@ namespace nspector.Native.NVAPI2
             }
         }
 
-        public uint dwordValue
+        public uint DwordValue
         {
             readonly get
             {
@@ -266,7 +266,7 @@ namespace nspector.Native.NVAPI2
             }
         }
 
-        public string stringValue
+        public string StringValue
         {
             readonly get
             {
@@ -281,7 +281,7 @@ namespace nspector.Native.NVAPI2
             }
         }
 
-        public string ansiStringValue
+        public string AnsiStringValue
         {
             readonly get
             {
@@ -344,7 +344,7 @@ namespace nspector.Native.NVAPI2
     [StructLayout(LayoutKind.Sequential, Pack = 8, CharSet = CharSet.Unicode)]
     internal struct NVDRS_APPLICATION_V3
     {
-        public uint isMetro { readonly get { return ((uint)((bitvector1 & 1))); } set { bitvector1 = ((uint)((value | bitvector1))); } }
+        public uint IsMetro { readonly get { return ((uint)((bitvector1 & 1))); } set { bitvector1 = ((uint)((value | bitvector1))); } }
 
         public uint version;
         public uint isPredefined;

@@ -32,10 +32,10 @@ namespace nspector.Common.Import
 
             return setting.settingType switch
             {
-                NVDRS_SETTING_TYPE.NVDRS_DWORD_TYPE => settingUnion.dwordValue.ToString(),
-                NVDRS_SETTING_TYPE.NVDRS_STRING_TYPE => settingUnion.ansiStringValue,
-                NVDRS_SETTING_TYPE.NVDRS_WSTRING_TYPE => settingUnion.stringValue,
-                NVDRS_SETTING_TYPE.NVDRS_BINARY_TYPE => Convert.ToBase64String(settingUnion.binaryValue),
+                NVDRS_SETTING_TYPE.NVDRS_DWORD_TYPE => settingUnion.DwordValue.ToString(),
+                NVDRS_SETTING_TYPE.NVDRS_STRING_TYPE => settingUnion.AnsiStringValue,
+                NVDRS_SETTING_TYPE.NVDRS_WSTRING_TYPE => settingUnion.StringValue,
+                NVDRS_SETTING_TYPE.NVDRS_BINARY_TYPE => Convert.ToBase64String(settingUnion.BinaryValue),
                 _ => throw new Exception("invalid setting type"),
             };
         }
@@ -70,16 +70,16 @@ namespace nspector.Common.Import
             switch (valueType)
             {
                 case SettingValueType.Dword:
-                    union.dwordValue = uint.Parse(valueString);
+                    union.DwordValue = uint.Parse(valueString);
                     break;
                 case SettingValueType.String:
-                    union.stringValue = valueString;
+                    union.StringValue = valueString;
                     break;
                 case SettingValueType.AnsiString:
-                    union.ansiStringValue = valueString;
+                    union.AnsiStringValue = valueString;
                     break;
                 case SettingValueType.Binary:
-                    union.binaryValue = Convert.FromBase64String(valueString);
+                    union.BinaryValue = Convert.FromBase64String(valueString);
                     break;
                 default:
                     throw new Exception("invalid value type");

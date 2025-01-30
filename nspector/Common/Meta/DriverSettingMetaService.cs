@@ -32,6 +32,10 @@ namespace nspector.Common.Meta
 
         private SettingMeta GetDriverSettingMetaInternal(uint settingId)
         {
+            // temporary fix for 571.96 overflow bug by emoose
+            if ((settingId & 0xFFFFF000) == 0x10c7d000)
+                return null;
+
             var values = new NVDRS_SETTING_VALUES
             {
                 version = nvw.NVDRS_SETTING_VALUES_VER
@@ -65,26 +69,26 @@ namespace nspector.Common.Meta
 
             if (values.settingType == NVDRS_SETTING_TYPE.NVDRS_DWORD_TYPE)
             {
-                result.DefaultDwordValue = values.defaultValue.dwordValue;
+                result.DefaultDwordValue = values.defaultValue.DwordValue;
                 result.DwordValues = [];
                 for (int i = 0; i < values.numSettingValues; i++)
                 {
                     result.DwordValues.Add(
                         new SettingValue<uint>(Source)
                         {
-                            Value = values.settingValues[i].dwordValue,
-                            ValueName = DrsUtil.GetDwordString(values.settingValues[i].dwordValue),
+                            Value = values.settingValues[i].DwordValue,
+                            ValueName = DrsUtil.GetDwordString(values.settingValues[i].DwordValue),
                         });
                 }
             }
 
             if (values.settingType == NVDRS_SETTING_TYPE.NVDRS_WSTRING_TYPE)
             {
-                result.DefaultStringValue = values.defaultValue.stringValue;
+                result.DefaultStringValue = values.defaultValue.StringValue;
                 result.StringValues = [];
                 for (int i = 0; i < values.numSettingValues; i++)
                 {
-                    var strValue = values.settingValues[i].stringValue;
+                    var strValue = values.settingValues[i].StringValue;
                     if (strValue != null)
                     {
                         result.StringValues.Add(
@@ -99,11 +103,11 @@ namespace nspector.Common.Meta
 
             if (values.settingType == NVDRS_SETTING_TYPE.NVDRS_BINARY_TYPE)
             {
-                result.DefaultBinaryValue = values.defaultValue.binaryValue;
+                result.DefaultBinaryValue = values.defaultValue.BinaryValue;
                 result.BinaryValues = [];
                 for (int i = 0; i < values.numSettingValues; i++)
                 {
-                    var binValue = values.settingValues[i].binaryValue;
+                    var binValue = values.settingValues[i].BinaryValue;
                     if (binValue != null)
                     {
                         result.BinaryValues.Add(

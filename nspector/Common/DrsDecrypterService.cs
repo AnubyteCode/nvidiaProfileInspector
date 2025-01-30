@@ -73,15 +73,15 @@ namespace nspector.Common
                 {
                     if (setting.settingType == NVDRS_SETTING_TYPE.NVDRS_WSTRING_TYPE)
                     {
-                        setting.predefinedValue.stringValue = DecryptStringValue(setting.predefinedValue.rawData, setting.settingId);
+                        setting.predefinedValue.StringValue = DecryptStringValue(setting.predefinedValue.rawData, setting.settingId);
                         if (setting.isCurrentPredefined == 1)
-                            setting.currentValue.stringValue = DecryptStringValue(setting.currentValue.rawData, setting.settingId);
+                            setting.currentValue.StringValue = DecryptStringValue(setting.currentValue.rawData, setting.settingId);
                     }
                     else if (setting.settingType == NVDRS_SETTING_TYPE.NVDRS_DWORD_TYPE)
                     {
-                        setting.predefinedValue.dwordValue = DecryptDwordValue(setting.predefinedValue.dwordValue, setting.settingId);
+                        setting.predefinedValue.DwordValue = DecryptDwordValue(setting.predefinedValue.DwordValue, setting.settingId);
                         if (setting.isCurrentPredefined == 1)
-                            setting.currentValue.dwordValue = DecryptDwordValue(setting.currentValue.dwordValue, setting.settingId);
+                            setting.currentValue.DwordValue = DecryptDwordValue(setting.currentValue.DwordValue, setting.settingId);
                     }
                 }
             }

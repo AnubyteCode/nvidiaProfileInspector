@@ -396,8 +396,8 @@ namespace nspector.Common
                 }
                 else if (setting.isCurrentPredefined == 1 && setting.isPredefinedValid == 1)
                 {
-                    valueRaw = DrsUtil.GetDwordString(setting.predefinedValue.dwordValue);
-                    valueText = DrsUtil.GetDwordSettingValueName(settingMeta, setting.predefinedValue.dwordValue);
+                    valueRaw = DrsUtil.GetDwordString(setting.predefinedValue.DwordValue);
+                    valueText = DrsUtil.GetDwordSettingValueName(settingMeta, setting.predefinedValue.DwordValue);
 
                     if (setting.settingLocation == NVDRS_SETTING_LOCATION.NVDRS_CURRENT_PROFILE_LOCATION)
                         settingState = SettingState.NvidiaSetting;
@@ -406,8 +406,8 @@ namespace nspector.Common
                 }
                 else
                 {
-                    valueRaw = DrsUtil.GetDwordString(setting.currentValue.dwordValue);
-                    valueText = DrsUtil.GetDwordSettingValueName(settingMeta, setting.currentValue.dwordValue);
+                    valueRaw = DrsUtil.GetDwordString(setting.currentValue.DwordValue);
+                    valueText = DrsUtil.GetDwordSettingValueName(settingMeta, setting.currentValue.DwordValue);
 
                     if (setting.settingLocation == NVDRS_SETTING_LOCATION.NVDRS_CURRENT_PROFILE_LOCATION)
                         settingState = SettingState.UserdefinedSetting;
@@ -425,14 +425,14 @@ namespace nspector.Common
                 }
                 else if (setting.isCurrentPredefined == 1 && setting.isPredefinedValid == 1)
                 {
-                    valueRaw = setting.predefinedValue.stringValue;
-                    valueText = DrsUtil.GetStringSettingValueName(settingMeta, setting.predefinedValue.stringValue);
+                    valueRaw = setting.predefinedValue.StringValue;
+                    valueText = DrsUtil.GetStringSettingValueName(settingMeta, setting.predefinedValue.StringValue);
                     settingState = SettingState.NvidiaSetting;
                 }
                 else
                 {
-                    valueRaw = setting.currentValue.stringValue;
-                    valueText = DrsUtil.GetStringSettingValueName(settingMeta, setting.currentValue.stringValue);
+                    valueRaw = setting.currentValue.StringValue;
+                    valueText = DrsUtil.GetStringSettingValueName(settingMeta, setting.currentValue.StringValue);
 
                     if (setting.settingLocation == NVDRS_SETTING_LOCATION.NVDRS_CURRENT_PROFILE_LOCATION)
                         settingState = SettingState.UserdefinedSetting;
@@ -450,14 +450,14 @@ namespace nspector.Common
                 }
                 else if (setting.isCurrentPredefined == 1 && setting.isPredefinedValid == 1)
                 {
-                    valueRaw = DrsUtil.GetBinaryString(setting.predefinedValue.binaryValue);
-                    valueText = DrsUtil.GetBinarySettingValueName(settingMeta, setting.predefinedValue.binaryValue);
+                    valueRaw = DrsUtil.GetBinaryString(setting.predefinedValue.BinaryValue);
+                    valueText = DrsUtil.GetBinarySettingValueName(settingMeta, setting.predefinedValue.BinaryValue);
                     settingState = SettingState.NvidiaSetting;
                 }
                 else
                 {
-                    valueRaw = DrsUtil.GetBinaryString(setting.currentValue.binaryValue);
-                    valueText = DrsUtil.GetBinarySettingValueName(settingMeta, setting.currentValue.binaryValue);
+                    valueRaw = DrsUtil.GetBinaryString(setting.currentValue.BinaryValue);
+                    valueText = DrsUtil.GetBinarySettingValueName(settingMeta, setting.currentValue.BinaryValue);
 
                     if (setting.settingLocation == NVDRS_SETTING_LOCATION.NVDRS_CURRENT_PROFILE_LOCATION)
                         settingState = SettingState.UserdefinedSetting;
