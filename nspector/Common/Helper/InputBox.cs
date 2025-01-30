@@ -18,7 +18,7 @@ namespace nspector.Common.Helper
             var buttonCancel = new Button();
             var imageBox = new PictureBox();
 
-            void textchanged(object sender, EventArgs e)
+            EventHandler textchanged = delegate (object sender, EventArgs e)
             {
                 bool mandatory_success = Regex.IsMatch(textBox.Text, mandatoryFormatRegExPattern);
 
@@ -41,7 +41,7 @@ namespace nspector.Common.Helper
 
                 imageBox.Image = Properties.Resources.ieframe_1_31073_002;
                 buttonOk.Enabled = true;
-            }
+            };
 
 
             textBox.TextChanged += textchanged;
@@ -69,13 +69,13 @@ namespace nspector.Common.Helper
 
             label.AutoSize = true;
             imageBox.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            textBox.Anchor |= AnchorStyles.Right;
+            textBox.Anchor = textBox.Anchor | AnchorStyles.Right;
             buttonOk.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             buttonCancel.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
 
             form.ClientSize = new Size(Dpi(396), Dpi(107));
             form.ClientSize = new Size(Math.Max(Dpi(300), label.Right + Dpi(10)), form.ClientSize.Height);
-            form.Controls.AddRange([label, textBox, imageBox, buttonOk, buttonCancel]);
+            form.Controls.AddRange(new Control[] { label, textBox, imageBox, buttonOk, buttonCancel });
             form.FormBorderStyle = FormBorderStyle.FixedDialog;
             form.StartPosition = FormStartPosition.CenterParent;
             form.MinimizeBox = false;

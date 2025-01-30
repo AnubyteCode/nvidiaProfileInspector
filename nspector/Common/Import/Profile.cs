@@ -7,7 +7,7 @@ namespace nspector.Common.Import
     public class Profile
     {
         public string ProfileName = "";
-        public List<string> Executeables = [];
-        public List<ProfileSetting> Settings = [];
+        public List<string> Executeables = new List<string>();
+        public List<ProfileSetting> Settings = new List<ProfileSetting>();
     }
 }

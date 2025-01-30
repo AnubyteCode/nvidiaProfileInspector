@@ -22,7 +22,7 @@ namespace nspector.Native
                     lstResult.Add(GetArrayItemData<T>(sourcePointer + (sizeOfItem * i)));
                 }
             }
-            return [.. lstResult];
+            return lstResult.ToArray();
         }
 
         public static void SetArrayData<T>(T[] items, out IntPtr targetPointer)

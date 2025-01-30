@@ -16,7 +16,7 @@ namespace nspector.Common
 
         internal uint SettingId;
 
-        internal List<CachedSettingValue> SettingValues = [];
+        internal List<CachedSettingValue> SettingValues = new List<CachedSettingValue>();
 
         internal uint ProfileCount = 0;
 

@@ -30,13 +30,13 @@ namespace nspector.Common.Helper
 
             try
             {
-                return fileInfo.Extension.ToLowerInvariant() switch
+                switch (fileInfo.Extension.ToLowerInvariant())
                 {
-                    ".lnk" => ResolveFromShellLinkFile(fileInfo.FullName),
-                    ".url" => ResolveFromUrlFile(fileInfo.FullName),
-                    ".exe" => fileInfo.Name,
-                    _ => "",
-                };
+                    case ".lnk": return ResolveFromShellLinkFile(fileInfo.FullName);
+                    case ".url": return ResolveFromUrlFile(fileInfo.FullName);
+                    case ".exe": return fileInfo.Name;
+                    default: return "";
+                }
             }
             catch
             {

@@ -19,9 +19,9 @@ namespace nspector.Common
         private readonly CustomSettingNames _customSettings;
         private readonly CustomSettingNames _referenceSettings;
 
-        private List<MetaServiceItem> MetaServices = [];
+        private List<MetaServiceItem> MetaServices = new List<MetaServiceItem>();
 
-        private Dictionary<uint, SettingMeta> settingMetaCache = [];
+        private Dictionary<uint, SettingMeta> settingMetaCache = new Dictionary<uint, SettingMeta>();
 
         public DrsSettingsMetaService(CustomSettingNames customSettings, CustomSettingNames referenceSettings = null)
         {
@@ -33,8 +33,8 @@ namespace nspector.Common
 
         public void ResetMetaCache(bool initOnly = false)
         {
-            settingMetaCache = [];
-            MetaServices = [];
+            settingMetaCache = new Dictionary<uint, SettingMeta>();
+            MetaServices = new List<MetaServiceItem>();
 
             CustomMeta = new CustomSettingMetaService(_customSettings);
             MetaServices.Add(new MetaServiceItem() { ValueNamePrio = 1, Service = CustomMeta });
@@ -174,9 +174,9 @@ namespace nspector.Common
 
             var atmp = a.FirstOrDefault();
             if (atmp != null && atmp is IComparable)
-                return [.. a.OrderBy(x => x.Value)];
+                return a.OrderBy(x => x.Value).ToList();
             else
-                return [.. a];
+                return a.ToList();
         }
 
         private List<SettingValue<byte[]>> GetBinaryValues(uint settingId)
@@ -214,7 +214,7 @@ namespace nspector.Common
 
             if (result != null)
             {
-                result = [.. (from v in result.Where(x => 1 == 1
+                result = (from v in result.Where(x => 1 == 1
                               && !x.ValueName.EndsWith("_NUM")
                               && !x.ValueName.EndsWith("_MASK")
                               && (!x.ValueName.EndsWith("_MIN") || x.ValueName.Equals("PREFERRED_PSTATE_PREFER_MIN"))
@@ -225,7 +225,7 @@ namespace nspector.Common
                           select g.First(t => t.ValueName == g.Key))
                             .OrderBy(v => v.ValueSource)
                             .ThenBy(v => v.ValuePos)
-                            .ThenBy(v => v.ValueName)];
+                            .ThenBy(v => v.ValueName).ToList();
 
             }
 
@@ -249,42 +249,47 @@ namespace nspector.Common
 
         private SettingMetaSource[] GetAllowedSettingIdMetaSourcesForViewMode(SettingViewMode viewMode)
         {
-            return viewMode switch
+            switch (viewMode)
             {
-                SettingViewMode.CustomSettingsOnly => [
-                                        SettingMetaSource.CustomSettings
-                                    ],
-                SettingViewMode.IncludeScannedSetttings => [
-                                        SettingMetaSource.ConstantSettings,
+                case SettingViewMode.CustomSettingsOnly:
+                    return new[] {
+                        SettingMetaSource.CustomSettings
+                    };
+                case SettingViewMode.IncludeScannedSetttings:
+                    return new[] {
+                        SettingMetaSource.ConstantSettings,
                         SettingMetaSource.ScannedSettings,
                         SettingMetaSource.CustomSettings,
                         SettingMetaSource.DriverSettings,
                         SettingMetaSource.ReferenceSettings,
-                    ],
-                _ => [
+                    };
+                default:
+                    return new[] {
                         SettingMetaSource.CustomSettings,
                         SettingMetaSource.DriverSettings,
-                    ],
-            };
+                    };
+            }
         }
 
         private SettingMetaSource[] GetAllowedSettingValueMetaSourcesForViewMode(SettingViewMode viewMode)
         {
-            return viewMode switch
+            switch (viewMode)
             {
-                SettingViewMode.CustomSettingsOnly => [
-                                        SettingMetaSource.CustomSettings,
+                case SettingViewMode.CustomSettingsOnly:
+                    return new[] {
+                        SettingMetaSource.CustomSettings,
                         SettingMetaSource.ScannedSettings,
-                    ],
-                _ => [
+                    };
+                default:
+                    return new[] {
                         SettingMetaSource.ConstantSettings,
                         SettingMetaSource.ScannedSettings,
                         SettingMetaSource.CustomSettings,
                         SettingMetaSource.DriverSettings,
                         SettingMetaSource.ReferenceSettings,
 
-                    ],
-            };
+                    };
+            }
         }
 
         private SettingMeta CreateSettingMeta(uint settingId)
@@ -293,7 +298,8 @@ namespace nspector.Common
             var settingName = GetSettingName(settingId);
             var groupName = GetGroupName(settingId);
 
-            groupName ??= GetLegacyGroupName(settingId, settingName);
+            if (groupName == null)
+                groupName = GetLegacyGroupName(settingId, settingName);
 
 
 
@@ -391,9 +397,7 @@ namespace nspector.Common
             }
         }
 
-#pragma warning disable IDE0060 // Remove unused parameter
         private string GetLegacyGroupName(uint settingId, string settingName)
-#pragma warning restore IDE0060 // Remove unused parameter
         {
             if (settingName == null)
                 return null;
@@ -424,7 +428,7 @@ namespace nspector.Common
         {
             var csn = MetaServices.FirstOrDefault(m => m.Service.Source == SettingMetaSource.CustomSettings);
             var csnDescription = csn != null ? ((CustomSettingMetaService)csn.Service).GetDescription(settingId) ?? "" : "";
-
+            
             var refs = MetaServices.FirstOrDefault(m => m.Service.Source == SettingMetaSource.ReferenceSettings);
             var refsDescription = refs != null ? ((CustomSettingMetaService)refs.Service).GetDescription(settingId) ?? "" : "";
 

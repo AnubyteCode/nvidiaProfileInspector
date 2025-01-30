@@ -6,11 +6,11 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("nvidiaProfileInspector")]
-[assembly: AssemblyDescription("Inspects NVIDIA profiles...")]
+[assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("AnubyteCode")]
+[assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("NVIDIA Profile Inspector")]
-[assembly: AssemblyCopyright("Orbmu2k")]
+[assembly: AssemblyCopyright("©2022 by Orbmu2k")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("c2fe2861-54c5-4d63-dead-30472019bed3")]
+[assembly: Guid("c2fe2861-54c5-4d63-968e-30472019bed3")]
 
 // Version information for an assembly consists of the following four values:
 //
@@ -32,7 +32,7 @@ using System.Runtime.InteropServices;
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("2.4.1.2")]
-[assembly: AssemblyFileVersion("2.4.1.2")]
+[assembly: AssemblyVersion("2.4.0.1")]
+[assembly: AssemblyFileVersion("2.4.0.1")]
 
-
+   

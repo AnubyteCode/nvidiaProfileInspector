@@ -13,17 +13,23 @@ namespace nspector.Common
 {
 
 
-    internal class DrsScannerService(DrsSettingsMetaService metaService, DrsDecrypterService decrpterService) : DrsSettingsServiceBase(metaService, decrpterService)
+    internal class DrsScannerService : DrsSettingsServiceBase
     {
-        internal List<CachedSettings> CachedSettings = [];
-        internal List<string> ModifiedProfiles = [];
-        internal HashSet<string> UserProfiles = [];
+
+        public DrsScannerService(DrsSettingsMetaService metaService, DrsDecrypterService decrpterService)
+            : base(metaService, decrpterService)
+        { }
+
+
+        internal List<CachedSettings> CachedSettings = new List<CachedSettings>();
+        internal List<string> ModifiedProfiles = new List<string>();
+        internal HashSet<string> UserProfiles = new HashSet<string>();
 
         // most common setting ids as start pattern for the heuristic scan
-        private readonly uint[] _commonSettingIds = [ 0x1095DEF8, 0x1033DCD2, 0x1033CEC1,
+        private readonly uint[] _commonSettingIds = new uint[] { 0x1095DEF8, 0x1033DCD2, 0x1033CEC1,
                             0x10930F46, 0x00A06946, 0x10ECDB82, 0x20EBD7B8, 0x0095DEF9, 0x00D55F7D,
                             0x1033DCD3, 0x1033CEC2, 0x2072F036, 0x00664339, 0x002C7F45, 0x209746C1,
-                            0x0076E164, 0x20FF7493, 0x204CFF7B ];
+                            0x0076E164, 0x20FF7493, 0x204CFF7B };
 
 
         private bool CheckCommonSetting(IntPtr hSession, IntPtr hProfile, NVDRS_PROFILE profile,
@@ -34,10 +40,8 @@ namespace nspector.Common
             if (checkedSettingsCount >= profile.numOfSettings)
                 return false;
 
-            var setting = new NVDRS_SETTING
-            {
-                version = nvw.NVDRS_SETTING_VER
-            };
+            var setting = new NVDRS_SETTING();
+            setting.version = nvw.NVDRS_SETTING_VER;
 
             if (nvw.DRS_GetSetting(hSession, hProfile, checkSettingId, ref setting) != NvAPI_Status.NVAPI_OK)
                 return false;
@@ -51,7 +55,10 @@ namespace nspector.Common
             }
             else if (addToScanResult)
             {
-                decrypter?.DecryptSettingIfNeeded(profile.profileName, ref setting);
+                if (decrypter != null)
+                {
+                    decrypter.DecryptSettingIfNeeded(profile.profileName, ref setting);
+                }
 
                 checkedSettingsCount++;
                 AddScannedSettingToCache(profile, setting);
@@ -72,12 +79,12 @@ namespace nspector.Common
             return (current > 0) ? (int)Math.Round((current * 100f) / max) : 0; ;
         }
 
-        public async Task ScanProfileSettingsAsync(bool justModified, IProgress<int> progress, CancellationToken token = default)
+        public async Task ScanProfileSettingsAsync(bool justModified, IProgress<int> progress, CancellationToken token = default(CancellationToken))
         {
             await Task.Run(() =>
             {
-                ModifiedProfiles = [];
-                UserProfiles = [];
+                ModifiedProfiles = new List<string>();
+                UserProfiles = new HashSet<string>();
                 var knownPredefines = new List<uint>(_commonSettingIds);
 
                 DrsSession((hSession) =>
@@ -155,7 +162,7 @@ namespace nspector.Common
         private void AddScannedSettingToCache(NVDRS_PROFILE profile, NVDRS_SETTING setting)
         {
             // 3D Vision is dead so dont bother scanning those values for improved scan performance
-            bool allowAddValue = !((setting.settingId & 0x70000000) == 0x70000000);
+            bool allowAddValue = !((setting.settingId & 0x70000000) == 0x70000000); 
             //bool allowAddValue = true;
 
             var cachedSetting = CachedSettings
@@ -173,12 +180,12 @@ namespace nspector.Common
                 if (allowAddValue)
                 {
                     if (setting.settingType == NVDRS_SETTING_TYPE.NVDRS_WSTRING_TYPE)
-                        cachedSetting.AddStringValue(setting.predefinedValue.StringValue, profile.profileName);
+                        cachedSetting.AddStringValue(setting.predefinedValue.stringValue, profile.profileName);
                     else if (setting.settingType == NVDRS_SETTING_TYPE.NVDRS_DWORD_TYPE)
-                        cachedSetting.AddDwordValue(setting.predefinedValue.DwordValue, profile.profileName);
+                        cachedSetting.AddDwordValue(setting.predefinedValue.dwordValue, profile.profileName);
                     else if (setting.settingType == NVDRS_SETTING_TYPE.NVDRS_BINARY_TYPE)
-                        cachedSetting.AddBinaryValue(setting.predefinedValue.BinaryValue, profile.profileName);
-
+                        cachedSetting.AddBinaryValue(setting.predefinedValue.binaryValue, profile.profileName);
+                    
                 }
                 else
                     cachedSetting.ProfileCount++;

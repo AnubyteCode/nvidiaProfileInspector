@@ -1,12 +1,3 @@
-**Note:**
-This fork will be updated for the time being. 
-Please test your option suggestions, or ask a friend with the right hardware to do so, using the Reference.xml.
-
-Check releases for a pre-release dark mode build. 
-It should autodetect OS and apply the right settings, such as Mica support on Windows 11.
-
-**Original README body:**
-
 ![](/nspector/Images/n1-016.png) **NVIDIA Profile Inspector**
 
 This tool is used for modifying game profiles inside the internal driver database of the nvidia driver.

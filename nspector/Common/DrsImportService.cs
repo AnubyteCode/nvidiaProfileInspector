@@ -9,16 +9,24 @@ using nspector.Common.Helper;
 
 namespace nspector.Common
 {
-    internal class DrsImportService(
-        DrsSettingsMetaService metaService,
-        DrsSettingsService settingService,
-        DrsScannerService scannerService,
-        DrsDecrypterService decrypterService) : DrsSettingsServiceBase(metaService)
+    internal class DrsImportService : DrsSettingsServiceBase
     {
 
-        private readonly DrsSettingsService _SettingService = settingService;
-        private readonly DrsScannerService _ScannerService = scannerService;
-        private readonly DrsDecrypterService _DecrypterService = decrypterService;
+        private readonly DrsSettingsService _SettingService;
+        private readonly DrsScannerService _ScannerService;
+        private readonly DrsDecrypterService _DecrypterService;
+
+        public DrsImportService(
+            DrsSettingsMetaService metaService,
+            DrsSettingsService settingService,
+            DrsScannerService scannerService,
+            DrsDecrypterService decrypterService)
+            : base(metaService)
+        {
+            _SettingService = settingService;
+            _ScannerService = scannerService;
+            _DecrypterService = decrypterService;
+        }
 
         internal void ExportAllProfilesToNvidiaTextFile(string filename)
         {
@@ -114,7 +122,8 @@ namespace nspector.Common
 
                     if (hProfile != IntPtr.Zero)
                     {
-                        _SettingService.ResetProfile(profile.ProfileName, out bool modified);
+                        var modified = false;
+                        _SettingService.ResetProfile(profile.ProfileName, out modified);
                         try
                         {
                             UpdateApplications(hSession, hProfile, profile);
@@ -128,7 +137,8 @@ namespace nspector.Common
                             }
 
                             sbFailedProfilesMessage.AppendLine(string.Format("Failed to import profile '{0}'", profile.ProfileName));
-                            if (nex is NvapiAddApplicationException appEx)
+                            var appEx = nex as NvapiAddApplicationException;
+                            if (appEx != null)
                             {
                                 var profilesWithThisApp = _ScannerService.FindProfilesUsingApplication(appEx.ApplicationName);
                                 sbFailedProfilesMessage.AppendLine(string.Format("- application '{0}' is already in use by profile '{1}'", appEx.ApplicationName, profilesWithThisApp));
@@ -187,7 +197,6 @@ namespace nspector.Common
             }
         }
 
-     /*
         private uint GetImportValue(uint settingId, Profile importProfile)
         {
             var setting = importProfile.Settings
@@ -198,7 +207,6 @@ namespace nspector.Common
 
             return 0;
         }
-     */
 
         private ProfileSetting GetImportProfileSetting(uint settingId, Profile importProfile)
         {

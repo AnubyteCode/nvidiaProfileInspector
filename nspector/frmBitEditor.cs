@@ -1,11 +1,13 @@
-﻿using nspector.Common;
-using System;
+﻿using System;
 using System.Diagnostics;
 using System.Drawing;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using nspector.Common;
+using nspector.Common.CustomSettings;
 
 namespace nspector
 {
@@ -15,6 +17,7 @@ namespace nspector
         private frmDrvSettings _SettingsOwner = null;
         private uint _InitValue = 0;
         private uint _CurrentValue = 0;
+
 
         internal frmBitEditor()
         {
@@ -57,6 +60,7 @@ namespace nspector
 
                 if (settingsCache != null)
                 {
+
                     for (int i = 0; i < settingsCache.SettingValues.Count; i++)
                     {
                         if (((settingsCache.SettingValues[i].Value >> bit) & 0x1) == 0x1)
@@ -106,6 +110,8 @@ namespace nspector
                         profileCount.ToString(),
                         profileNames,
                     }));
+
+
             }
 
             SetValue(lastValue);
@@ -138,6 +144,7 @@ namespace nspector
 
             UpdateCurrent(val);
         }
+
 
         private void SetValue(uint val)
         {
@@ -199,6 +206,7 @@ namespace nspector
             UpdateCurrent(textBox1.Text);
         }
 
+
         private void ApplyValueToProfile(uint val)
         {
             DrsServiceLocator
@@ -232,17 +240,16 @@ namespace nspector
 
         private void btnBrowseGame_Click(object sender, EventArgs e)
         {
-            OpenFileDialog ofd = new()
-            {
-                DefaultExt = "*.exe",
-                Filter = "Applications|*.exe",
-                DereferenceLinks = false
-            };
+            OpenFileDialog ofd = new OpenFileDialog();
+            ofd.DefaultExt = "*.exe";
+            ofd.Filter = "Applications|*.exe";
+            ofd.DereferenceLinks = false;
 
             if (ofd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
                 tbGamePath.Text = ofd.FileName;
             }
         }
+
     }
 }

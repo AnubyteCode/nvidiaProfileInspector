@@ -11,7 +11,7 @@ namespace nspector.Common
     internal class DrsDecrypterService : DrsSettingsServiceBase
     {
 
-        private static readonly byte[] _InternalSettingsKey = [
+        private static readonly byte[] _InternalSettingsKey = new byte[] {
             0x2f, 0x7c, 0x4f, 0x8b, 0x20, 0x24, 0x52, 0x8d, 0x26, 0x3c, 0x94, 0x77, 0xf3, 0x7c, 0x98, 0xa5,
             0xfa, 0x71, 0xb6, 0x80, 0xdd, 0x35, 0x84, 0xba, 0xfd, 0xb6, 0xa6, 0x1b, 0x39, 0xc4, 0xcc, 0xb0,
             0x7e, 0x95, 0xd9, 0xee, 0x18, 0x4b, 0x9c, 0xf5, 0x2d, 0x4e, 0xd0, 0xc1, 0x55, 0x17, 0xdf, 0x18,
@@ -27,7 +27,7 @@ namespace nspector.Common
             0x1c, 0x4b, 0xf8, 0x26, 0x03, 0x6e, 0xb2, 0x3f, 0x1e, 0xe6, 0xca, 0x3d, 0x61, 0x44, 0xb0, 0x92,
             0xaf, 0xf0, 0x88, 0xca, 0xe0, 0x5f, 0x5d, 0xf4, 0xdf, 0xc6, 0x4c, 0xa4, 0xe0, 0xca, 0xb0, 0x20,
             0x5d, 0xc0, 0xfa, 0xdd, 0x9a, 0x34, 0x8f, 0x50, 0x79, 0x5a, 0x5f, 0x7c, 0x19, 0x9e, 0x40, 0x70,
-            0x71, 0xb5, 0x45, 0x19, 0xb8, 0x53, 0xfc, 0xdf, 0x24, 0xbe, 0x22, 0x1c, 0x79, 0xbf, 0x42, 0x89 ];
+            0x71, 0xb5, 0x45, 0x19, 0xb8, 0x53, 0xfc, 0xdf, 0x24, 0xbe, 0x22, 0x1c, 0x79, 0xbf, 0x42, 0x89 };
 
         public DrsDecrypterService(DrsSettingsMetaService metaService) : base(metaService)
         {
@@ -73,15 +73,15 @@ namespace nspector.Common
                 {
                     if (setting.settingType == NVDRS_SETTING_TYPE.NVDRS_WSTRING_TYPE)
                     {
-                        setting.predefinedValue.StringValue = DecryptStringValue(setting.predefinedValue.rawData, setting.settingId);
+                        setting.predefinedValue.stringValue = DecryptStringValue(setting.predefinedValue.rawData, setting.settingId);
                         if (setting.isCurrentPredefined == 1)
-                            setting.currentValue.StringValue = DecryptStringValue(setting.currentValue.rawData, setting.settingId);
+                            setting.currentValue.stringValue = DecryptStringValue(setting.currentValue.rawData, setting.settingId);
                     }
                     else if (setting.settingType == NVDRS_SETTING_TYPE.NVDRS_DWORD_TYPE)
                     {
-                        setting.predefinedValue.DwordValue = DecryptDwordValue(setting.predefinedValue.DwordValue, setting.settingId);
+                        setting.predefinedValue.dwordValue = DecryptDwordValue(setting.predefinedValue.dwordValue, setting.settingId);
                         if (setting.isCurrentPredefined == 1)
-                            setting.currentValue.DwordValue = DecryptDwordValue(setting.currentValue.DwordValue, setting.settingId);
+                            setting.currentValue.dwordValue = DecryptDwordValue(setting.currentValue.dwordValue, setting.settingId);
                     }
                 }
             }
@@ -97,7 +97,7 @@ namespace nspector.Common
             return _InternalSettings.Contains(FormatInternalSettingKey(profileName, settingId));
         }
 
-        private HashSet<string> _InternalSettings = [];
+        private HashSet<string> _InternalSettings = new HashSet<string>();
 
         private void CreateInternalSettingMap()
         {
@@ -114,7 +114,7 @@ namespace nspector.Common
                 {
                     var lines = File.ReadAllLines(tmpfile);
 
-                    _InternalSettings = [];
+                    _InternalSettings = new HashSet<string>();
 
                     var paProfile = "Profile\\s\\\"(?<profileName>.*?)\\\"";
                     var rxProfile = new Regex(paProfile, RegexOptions.Compiled);

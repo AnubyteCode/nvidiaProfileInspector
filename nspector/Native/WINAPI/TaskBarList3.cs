@@ -5,15 +5,15 @@ using System.Runtime.InteropServices;
 namespace nspector.Native.WINAPI
 {
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
-    internal readonly struct THUMBBUTTON
+    internal struct THUMBBUTTON
     {
-        readonly Int32 dwMask;
-        readonly uint iId;
-        readonly uint iBitmap;
-        readonly IntPtr hIcon;
+        Int32 dwMask;
+        uint iId;
+        uint iBitmap;
+        IntPtr hIcon;
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 260)]
-        readonly string szTip;
-        readonly Int32 dwFlags;
+        string szTip;
+        Int32 dwFlags;
     }
 
     [Flags]

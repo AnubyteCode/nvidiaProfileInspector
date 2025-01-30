@@ -45,7 +45,7 @@ namespace nspector.Common.Helper
             {
                 return XMLHelper<UserSettings>.DeserializeFromXMLFile(GetSettingsFilename());
             }
-            catch
+            catch 
             {
                 return new UserSettings();
             }

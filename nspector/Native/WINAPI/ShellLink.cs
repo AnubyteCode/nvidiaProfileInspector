@@ -49,7 +49,7 @@ namespace nspector.Native.WINAPI
             void GetPath(
                [Out(), MarshalAs(UnmanagedType.LPStr)] StringBuilder pszFile,
                int cchMaxPath,
-               ref WIN32_FIND_DATAA pfd,
+               ref _WIN32_FIND_DATAA pfd,
                uint fFlags);
 
             void GetIDList(out IntPtr ppidl);
@@ -113,7 +113,7 @@ namespace nspector.Native.WINAPI
             void GetPath(
                [Out(), MarshalAs(UnmanagedType.LPWStr)] StringBuilder pszFile,
                int cchMaxPath,
-               ref WIN32_FIND_DATAW pfd,
+               ref _WIN32_FIND_DATAW pfd,
                uint fFlags);
 
             void GetIDList(out IntPtr ppidl);
@@ -198,12 +198,12 @@ namespace nspector.Native.WINAPI
 
 
         [StructLayout(LayoutKind.Sequential, Pack = 4, Size = 0, CharSet = CharSet.Unicode)]
-        private struct WIN32_FIND_DATAW
+        private struct _WIN32_FIND_DATAW
         {
             internal uint dwFileAttributes;
-            internal FILETIME ftCreationTime;
-            internal FILETIME ftLastAccessTime;
-            internal FILETIME ftLastWriteTime;
+            internal _FILETIME ftCreationTime;
+            internal _FILETIME ftLastAccessTime;
+            internal _FILETIME ftLastWriteTime;
             internal uint nFileSizeHigh;
             internal uint nFileSizeLow;
             internal uint dwReserved0;
@@ -215,12 +215,12 @@ namespace nspector.Native.WINAPI
         }
 
         [StructLayout(LayoutKind.Sequential, Pack = 4, Size = 0, CharSet = CharSet.Ansi)]
-        private struct WIN32_FIND_DATAA
+        private struct _WIN32_FIND_DATAA
         {
             internal uint dwFileAttributes;
-            internal FILETIME ftCreationTime;
-            internal FILETIME ftLastAccessTime;
-            internal FILETIME ftLastWriteTime;
+            internal _FILETIME ftCreationTime;
+            internal _FILETIME ftLastAccessTime;
+            internal _FILETIME ftLastWriteTime;
             internal uint nFileSizeHigh;
             internal uint nFileSizeLow;
             internal uint dwReserved0;
@@ -232,7 +232,7 @@ namespace nspector.Native.WINAPI
         }
 
         [StructLayout(LayoutKind.Sequential, Pack = 4, Size = 0)]
-        private struct FILETIME
+        private struct _FILETIME
         {
             internal uint dwLowDateTime;
             internal uint dwHighDateTime;
@@ -330,11 +330,10 @@ namespace nspector.Native.WINAPI
         {
             get
             {
-                StringBuilder iconPath = new(260, 260);
-                int iconIndex;
+                StringBuilder iconPath = new StringBuilder(260, 260);
+                int iconIndex = 0;
                 if (linkA == null)
                 {
-#pragma warning disable IDE0059 // Unnecessary assignment of a value
                     linkW.GetIconLocation(iconPath, iconPath.Capacity, out
                 iconIndex);
                 }
@@ -342,14 +341,13 @@ namespace nspector.Native.WINAPI
                 {
                     linkA.GetIconLocation(iconPath, iconPath.Capacity, out
                 iconIndex);
-#pragma warning restore IDE0059 // Unnecessary assignment of a value
                 }
                 return iconPath.ToString();
             }
             set
             {
-                StringBuilder iconPath = new(260, 260);
-                int iconIndex;
+                StringBuilder iconPath = new StringBuilder(260, 260);
+                int iconIndex = 0;
                 if (linkA == null)
                 {
                     linkW.GetIconLocation(iconPath, iconPath.Capacity, out
@@ -375,8 +373,8 @@ namespace nspector.Native.WINAPI
         {
             get
             {
-                StringBuilder iconPath = new(260, 260);
-                int iconIndex;
+                StringBuilder iconPath = new StringBuilder(260, 260);
+                int iconIndex = 0;
                 if (linkA == null)
                 {
                     linkW.GetIconLocation(iconPath, iconPath.Capacity, out
@@ -391,11 +389,10 @@ namespace nspector.Native.WINAPI
             }
             set
             {
-                StringBuilder iconPath = new(260, 260);
-                int iconIndex;
+                StringBuilder iconPath = new StringBuilder(260, 260);
+                int iconIndex = 0;
                 if (linkA == null)
                 {
-#pragma warning disable IDE0059 // Unnecessary assignment of a value
                     linkW.GetIconLocation(iconPath, iconPath.Capacity, out
                 iconIndex);
                 }
@@ -403,7 +400,6 @@ namespace nspector.Native.WINAPI
                 {
                     linkA.GetIconLocation(iconPath, iconPath.Capacity, out
                 iconIndex);
-#pragma warning restore IDE0059 // Unnecessary assignment of a value
                 }
                 if (linkA == null)
                 {
@@ -420,16 +416,16 @@ namespace nspector.Native.WINAPI
         {
             get
             {
-                StringBuilder target = new(260, 260);
+                StringBuilder target = new StringBuilder(260, 260);
                 if (linkA == null)
                 {
-                    WIN32_FIND_DATAW fd = new();
+                    _WIN32_FIND_DATAW fd = new _WIN32_FIND_DATAW();
                     linkW.GetPath(target, target.Capacity, ref fd,
                      (uint)EShellLinkGP.SLGP_UNCPRIORITY);
                 }
                 else
                 {
-                    WIN32_FIND_DATAA fd = new();
+                    _WIN32_FIND_DATAA fd = new _WIN32_FIND_DATAA();
                     linkA.GetPath(target, target.Capacity, ref fd,
                      (uint)EShellLinkGP.SLGP_UNCPRIORITY);
                 }
@@ -452,7 +448,7 @@ namespace nspector.Native.WINAPI
         {
             get
             {
-                StringBuilder path = new(260, 260);
+                StringBuilder path = new StringBuilder(260, 260);
                 if (linkA == null)
                 {
                     linkW.GetWorkingDirectory(path, path.Capacity);
@@ -480,7 +476,7 @@ namespace nspector.Native.WINAPI
         {
             get
             {
-                StringBuilder description = new(1024, 1024);
+                StringBuilder description = new StringBuilder(1024, 1024);
                 if (linkA == null)
                 {
                     linkW.GetDescription(description, description.Capacity);
@@ -508,7 +504,7 @@ namespace nspector.Native.WINAPI
         {
             get
             {
-                StringBuilder arguments = new(260, 260);
+                StringBuilder arguments = new StringBuilder(260, 260);
                 if (linkA == null)
                 {
                     linkW.GetArguments(arguments, arguments.Capacity);
@@ -536,7 +532,7 @@ namespace nspector.Native.WINAPI
         {
             get
             {
-                uint cmd;
+                uint cmd = 0;
                 if (linkA == null)
                 {
                     linkW.GetShowCmd(out cmd);
@@ -564,7 +560,7 @@ namespace nspector.Native.WINAPI
         {
             get
             {
-                short key;
+                short key = 0;
                 if (linkA == null)
                 {
                     linkW.GetHotkey(out key);

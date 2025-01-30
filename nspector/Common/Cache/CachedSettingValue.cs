@@ -31,7 +31,7 @@ namespace nspector.Common
 
         internal string ValueStr = "";
         internal uint Value = 0;
-        internal byte[] ValueBin = [];
+        internal byte[] ValueBin = new byte[0];
         internal StringBuilder ProfileNames;
         internal uint ValueProfileCount;
     }

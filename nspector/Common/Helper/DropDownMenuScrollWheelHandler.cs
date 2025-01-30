@@ -60,12 +60,12 @@ namespace nspector.Common.Helper
 
             var firstItem = ts.Items[0];
             var lastItem = ts.Items[ts.Items.Count - 1];
-
+            
             if (lastItem.Bounds.Bottom < ts.Height && firstItem.Bounds.Top > 0)
                 return;
-
-            delta /= -4;
-
+            
+            delta = delta / -4;
+            
             if (delta < 0 && firstItem.Bounds.Top - delta > 9)
             {
                 delta = firstItem.Bounds.Top - 9;
@@ -74,7 +74,7 @@ namespace nspector.Common.Helper
             {
                 delta = lastItem.Bounds.Bottom - ts.Height + 9;
             }
-
+            
             if (delta != 0)
                 ScrollInternal(ts, delta);
         }

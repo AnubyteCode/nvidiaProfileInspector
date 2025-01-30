@@ -300,7 +300,7 @@ namespace nspector.Native.WINAPI
 
         internal bool bringAppToFront(int hWnd)
         {
-            WINDOWPLACEMENT param = new();
+            WINDOWPLACEMENT param = new WINDOWPLACEMENT();
             if (GetWindowPlacement(hWnd, ref param))
             {
                 if (param.showCmd != SW_NORMAL)
@@ -371,7 +371,7 @@ namespace nspector.Native.WINAPI
 
         internal void startProcess(string processName)
         {
-            System.Diagnostics.Process process = new();
+            System.Diagnostics.Process process = new System.Diagnostics.Process();
             process.StartInfo.UseShellExecute = true;
             process.StartInfo.FileName = processName;
             process.Start();
