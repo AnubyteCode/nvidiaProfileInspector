@@ -16,6 +16,7 @@ namespace nspector
         internal frmExportProfiles()
         {
             InitializeComponent();
+            MicaHelper.ApplyMicaEffect(this);
             this.Icon = Icon.ExtractAssociatedIcon(Application.ExecutablePath);
             this.DoubleBuffered = true;
         }
@@ -92,11 +93,11 @@ namespace nspector
 
                 if (profileNamesToExport.Count > 0)
                 {
-                    if (MessageBox.Show("Export succeeded.\r\n\r\nWould you like to continue exporting profiles?", "Profiles Export", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == System.Windows.Forms.DialogResult.No)
+                    if (MicaHelper.CustomMessageBox.Show("Export succeeded.\r\n\r\nWould you like to continue exporting profiles?", "Profiles Export", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == System.Windows.Forms.DialogResult.No)
                         Close();
                 }
                 else
-                    MessageBox.Show("Nothing to export");
+                    MicaHelper.CustomMessageBox.Show("Nothing to export");
             }
         }
 

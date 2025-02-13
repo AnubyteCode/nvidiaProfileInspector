@@ -127,6 +127,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MicaHelper.cs" />
     <Compile Include="Common\CustomSettings\CustomSetting.cs" />
     <Compile Include="Common\CustomSettings\CustomSettingValue.cs" />
     <Compile Include="Common\DrsDecrypterService.cs" />

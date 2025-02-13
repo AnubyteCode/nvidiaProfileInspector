@@ -29,6 +29,7 @@ namespace nspector
 #endif
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
+            MicaHelper.EnableDarkMode();
             DropDownMenuScrollWheelHandler.Enable(true);
 
             var argFileIndex = ArgFileIndex(args);
@@ -61,7 +62,7 @@ namespace nspector
                     }
                     catch (Exception ex)
                     {
-                        MessageBox.Show("Import Error: " + ex.Message, Application.ProductName + " Error",
+                        MicaHelper.CustomMessageBox.Show("Import Error: " + ex.Message, Application.ProductName + " Error",
                             MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
@@ -102,7 +103,7 @@ namespace nspector
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message + "\r\n\r\n" + ex.StackTrace ,"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MicaHelper.CustomMessageBox.Show(ex.Message + "\r\n\r\n" + ex.StackTrace ,"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 #endif
 

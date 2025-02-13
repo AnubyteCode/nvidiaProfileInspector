@@ -22,6 +22,7 @@ namespace nspector
         internal frmBitEditor()
         {
             InitializeComponent();
+            MicaHelper.ApplyMicaEffect(this);
             this.Icon = Icon.ExtractAssociatedIcon(Application.ExecutablePath);
             this.DoubleBuffered = true;
         }

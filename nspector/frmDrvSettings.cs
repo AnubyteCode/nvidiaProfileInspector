@@ -522,6 +522,7 @@ namespace nspector
         {
             _skipScan = skipScan;
             InitializeComponent();
+            MicaHelper.ApplyMicaEffect(this);
             InitTaskbarList();
             SetupDropFilesNative();
             SetupToolbar();
@@ -711,7 +712,7 @@ namespace nspector
                 frmExport.ShowDialog(this);
             }
             else
-                MessageBox.Show("No user modified profiles found! Nothing to export.", "Userprofile Search", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MicaHelper.CustomMessageBox.Show("No user modified profiles found! Nothing to export.", "Userprofile Search", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         private CancellationTokenSource _scannerCancelationTokenSource;
@@ -792,7 +793,7 @@ namespace nspector
         {
             if (Control.ModifierKeys == Keys.Control)
             {
-                if (MessageBox.Show(this,
+                if (MicaHelper.CustomMessageBox.Show(
                     "Restore all profiles to NVIDIA driver defaults?",
                     "Restore all profiles",
                     MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
@@ -892,7 +893,7 @@ namespace nspector
         {
             if (Control.ModifierKeys == Keys.Control)
             {
-                if (MessageBox.Show(this, "Really delete all profiles?", "Delete all profiles", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == System.Windows.Forms.DialogResult.Yes)
+                if (MicaHelper.CustomMessageBox.Show("Really delete all profiles?", "Delete all profiles", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == System.Windows.Forms.DialogResult.Yes)
                 {
                     _drs.DeleteAllProfilesHard();
                     ChangeCurrentProfile(_baseProfileName);
@@ -900,7 +901,7 @@ namespace nspector
                     RefreshAll();
                 }
             }
-            else if (MessageBox.Show(this, "Really delete this profile?\r\n\r\nNote: NVIDIA predefined profiles can not be restored until next driver installation!", "Delete Profile", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == System.Windows.Forms.DialogResult.Yes)
+            else if (MicaHelper.CustomMessageBox.Show("Really delete this profile?\r\n\r\nNote: NVIDIA predefined profiles can not be restored until next driver installation!", "Delete Profile", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == System.Windows.Forms.DialogResult.Yes)
             {
                 if (_drs.DriverVersion > 280 && _drs.DriverVersion < 310)
                     // hack for driverbug
@@ -909,7 +910,7 @@ namespace nspector
                     _drs.DeleteProfile(_CurrentProfile);
 
                 RemoveFromModifiedProfiles(_CurrentProfile);
-                MessageBox.Show(this, string.Format("Profile '{0}' has been deleted.", _CurrentProfile), "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MicaHelper.CustomMessageBox.Show(string.Format("Profile '{0}' has been deleted.", _CurrentProfile), "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 RefreshProfilesCombo();
                 ChangeCurrentProfile(_baseProfileName);
             }
@@ -936,16 +937,16 @@ namespace nspector
                     if (ex.Status == Native.NVAPI2.NvAPI_Status.NVAPI_EXECUTABLE_ALREADY_IN_USE || ex.Status == Native.NVAPI2.NvAPI_Status.NVAPI_ERROR)
                     {
                         if (lblApplications.Text.ToUpper().IndexOf(" " + applicationName.ToUpper() + ",") != -1)
-                            MessageBox.Show("This application executable is already assigned to this profile!",
+                            MicaHelper.CustomMessageBox.Show("This application executable is already assigned to this profile!",
                                 "Error adding Application", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         else
                         {
                             string profileNames = _scanner.FindProfilesUsingApplication(applicationName);
                             if (profileNames == "")
-                                MessageBox.Show("This application executable might already be assigned to another profile!",
+                                MicaHelper.CustomMessageBox.Show("This application executable might already be assigned to another profile!",
                                     "Error adding Application", MessageBoxButtons.OK, MessageBoxIcon.Error);
                             else
-                                MessageBox.Show(
+                                MicaHelper.CustomMessageBox.Show(
                                     "This application executable is already assigned to the following profiles: " +
                                     profileNames, "Error adding Application", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         }
@@ -963,7 +964,7 @@ namespace nspector
             //    || (
             //        (uint)e.ClickedItem.Tag == 1
             //        &&
-            //        MessageBox.Show(this,
+            //        MicaHelper.CustomMessageBox.Show(this,
             //            "Do you really want to delete this NVIDIA predefined application executeable?\r\n\r\nNote: This can not be restored until next driver installation!",
             //            "Delete Application", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             //    )
@@ -996,7 +997,7 @@ namespace nspector
                 catch (NvapiException ex)
                 {
                     //TODO: could not create profile
-                    MessageBox.Show(ex.Message);
+                    MicaHelper.CustomMessageBox.Show(ex.Message);
                 }
             }
         }
@@ -1101,13 +1102,13 @@ namespace nspector
                 try
                 {
                     _import.ImportAllProfilesFromNvidiaTextFile(openDialog.FileName);
-                    MessageBox.Show("Profile(s) successfully imported!", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MicaHelper.CustomMessageBox.Show("Profile(s) successfully imported!", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Information);
                     DrsSessionScope.DestroyGlobalSession();
                     RefreshAll();
                 }
                 catch (NvapiException)
                 {
-                    MessageBox.Show("Profile(s) could not imported!", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MicaHelper.CustomMessageBox.Show("Profile(s) could not imported!", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
         }
@@ -1139,11 +1140,11 @@ namespace nspector
         {
             if (string.IsNullOrEmpty(importReport))
             {
-                MessageBox.Show("Profile(s) successfully imported!", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MicaHelper.CustomMessageBox.Show("Profile(s) successfully imported!", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             else
             {
-                MessageBox.Show("Some profile(s) could not imported!\r\n\r\n" + importReport, Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MicaHelper.CustomMessageBox.Show("Some profile(s) could not imported!\r\n\r\n" + importReport, Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
 
@@ -1182,7 +1183,7 @@ namespace nspector
                     }
                     else
                     {
-                        var dr = MessageBox.Show("Would you like to create a new profile for this application?", "Profile not found!", MessageBoxButtons.YesNo);
+                        var dr = MicaHelper.CustomMessageBox.Show("Would you like to create a new profile for this application?", "Profile not found!", MessageBoxButtons.YesNo);
                         if (dr == DialogResult.Yes)
                         {
                             ShowCreateProfileDialog(profileName, exeFile);
@@ -1298,7 +1299,9 @@ namespace nspector
             {
                 var lowerInput = inputString.Trim().ToLowerInvariant();
                 lvSettings.BeginUpdate();
-                foreach(ListViewItem itm in lvSettings.Items)
+                foreach(
+                                   
+                    ListViewItem itm in lvSettings.Items)
                 {
                     if (!itm.Text.ToLowerInvariant().Contains(lowerInput))
                     {
@@ -1372,7 +1375,7 @@ namespace nspector
             pbMain.Value = 0;
 
             Clipboard.SetText(sbSettings.ToString());
-            MessageBox.Show("Failed Settings Stored to Clipboard");
+            MicaHelper.CustomMessageBox.Show("Failed Settings Stored to Clipboard");
 
         }
 
