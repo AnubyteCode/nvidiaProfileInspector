@@ -1,3 +1,7 @@
+### ARCHIVED FOR CURRENT IRRELEVANCY.
+**SEE ORIGINAL REPO FOR THE LATEST VERSION.**
+___
+
 ![](/nspector/Images/n1-016.png) **NVIDIA Profile Inspector**
 
 This tool is used for modifying game profiles inside the internal driver database of the nvidia driver.
